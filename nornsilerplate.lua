@@ -35,6 +35,10 @@ function press_down(i) ---------- a key has been pressed
   message = "press down " .. i -- build a message
 end
 
+function press_grid(x,y,z) ---------- a grid button has been pressed
+  message = "grid press x: " .. x ..", y: ".. y -- build a message
+end
+
 function redraw_clock() ----- a clock that draws space
   while true do ------------- "while true do" means "do this forever"
     clock.sleep(1/15) ------- pause for a fifteenth of a second (aka 15fps)
@@ -61,6 +65,14 @@ function redraw() -------------- redraw() is automatically called by norns
   screen.update() -------------- update space
 end
 
+g = grid.connect()
+
+g.key = function(x,y,z)
+  if z==1 then press_grid(x,y,z) end -- print the xy to the screen
+  g:led(x,y,z*15)
+  g:refresh()
+  screen_dirty = true ----------------- something changed
+end
 
 function r() ----------------------------- execute r() in the repl to quickly rerun this script
   norns.script.load(norns.state.script) -- https://github.com/monome/norns/blob/main/lua/core/state.lua
